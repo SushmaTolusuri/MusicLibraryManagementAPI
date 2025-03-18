@@ -14,7 +14,8 @@ router.get('/',function (req,res){
 });
 
 // Import controllers here
-
+import * as userController from "../controllers/userController.js"
+import verifyToken from '../auth/auth.js'
 
 
 //define routes here
