@@ -1,3 +1,4 @@
+import express from 'express'
 const app = express()
 app.use(express.json());
 /*--- This is the new code ---*/
@@ -16,3 +17,8 @@ app.use('/api', apiRoutes);
 /*--- This is the end of the new code ---*/
 //set up the port number. Defaults to 3000 when we are not using a cloud platform
 const PORT = process.env.PORT || 3000
+
+app.listen(PORT, function (error) {
+    if (error) throw error
+    console.log("Server running Successfully on PORT", PORT)
+})
