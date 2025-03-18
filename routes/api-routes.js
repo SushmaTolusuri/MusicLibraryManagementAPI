@@ -17,6 +17,7 @@ router.get('/',function (req,res){
 import * as userController from "../controllers/userController.js"
 import * as genreController from "../controllers/genreController.js"
 import * as artistController from "../controllers/artistController.js"
+import * as albumController from "../controllers/albumController.js"
 
 
 import verifyToken from '../auth/auth.js'
@@ -59,6 +60,16 @@ router.route('/admin/readartists').get([verifyToken, artistController.readArtist
 router.route('/admin/updateartist').put([verifyToken, artistController.updateArtist]);
 // -- Delete Route - POST
 router.route('/admin/deleteartist').post([verifyToken, artistController.deleteArtist]);
+
+// Album Model Routes
+// -- Create Route - POST
+router.route('/admin/createalbum').post([verifyToken, albumController.createAlbum]);
+// -- Read Route - GET
+router.route('/admin/readalbums').get([verifyToken, albumController.readAlbums]);
+// -- Update Route - PUT
+router.route('/admin/updatealbum').put([verifyToken, albumController.updateAlbum]);
+// -- Delete Route - POST
+router.route('/admin/deletealbum').post([verifyToken, albumController.deleteAlbum]);
 
 // Eport API routers. As it is the only export,
 // we make it the default
