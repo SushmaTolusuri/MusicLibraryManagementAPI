@@ -19,7 +19,10 @@ import verifyToken from '../auth/auth.js'
 
 
 //define routes here
+router.route('/login').post(userController.login);
 
+router.route('/admin')
+.get([verifyToken, userController.admin]);
 
 // Eport API routers. As it is the only export,
 // we make it the default
