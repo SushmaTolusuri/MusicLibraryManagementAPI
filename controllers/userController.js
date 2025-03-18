@@ -56,5 +56,159 @@ export const login = function(req,res){
     });
 }
 
+// 1. Authenticated Route for Creating a User
+export const createUser = function (req, res) {
+	const dbConnect = async () => {
+		let db=null;
+		let user=null
+		try{
+			await mongoose.connect(conn.DBHost, {});
+			db=mongoose.connection
+			if(!db){
+				console.log("Error connecting DB");
+			}else{
+				console.log("DB Connection Successful")
+				const newUser = new User();
+			   	newUser.username = req.body.username;
+			  	newUser.password = req.body.password;
+
+			    const result=await newUser.save()
+			    return result
+			}
+
+			db.close()
+		}catch (err) {
+        	(db) && db.close(); /** Needs to close connection -
+            Only if mongoose.connect() is success & fails after it, as db connection is established by then. */
+            console.log('Error at dbConnect ::', err)
+            throw err;
+    	}	
+    }
+
+    dbConnect().then(result => {
+    	if(!result){
+			return res.status(401).send({message: "Data not inserted."});
+		}else{
+			return res.status(200).send({message:"Recorded Inserted"})
+		}	
+    });
+    
+}
+
+// 2. Authenticated Route for Getting all Users
+export const readUsers = function (req, res) {
+	const dbConnect = async () => {
+		let db=null;
+		let user=null
+		try{
+			await mongoose.connect(conn.DBHost, {});
+			db=mongoose.connection
+			if(!db){
+				console.log("Error connecting DB");
+			}else{
+				console.log("DB Connection Successful")
+				
+			    const result=await User.find()
+			    return result
+			}
+
+			db.close()
+		}catch (err) {
+        	(db) && db.close(); /** Needs to close connection -
+            Only if mongoose.connect() is success & fails after it, as db connection is established by then. */
+            console.log('Error at dbConnect ::', err)
+            throw err;
+    	}	
+    }
+
+    dbConnect().then(result => {
+    	return res.status(200).send(result)
+    });    
+}
+
+// 3. Authenticated Route for Updating a user
+export const updateUser = function (req, res) {
+	const dbConnect = async () => {
+		let db=null;
+		let user=null
+		try{
+			await mongoose.connect(conn.DBHost, {});
+			db=mongoose.connection
+			if(!db){
+				console.log("Error connecting DB");
+			}else{
+				console.log("DB Connection Successful")
+				
+			    const result=await  User.findByIdAndUpdate(req.body.id,{ username: req.body.username,password:req.body.password})
+			    return result
+			}
+
+			db.close()
+		}catch (err) {
+        	(db) && db.close(); /** Needs to close connection -
+            Only if mongoose.connect() is success & fails after it, as db connection is established by then. */
+            console.log('Error at dbConnect ::', err)
+            throw err;
+    	}	
+    }
+
+    dbConnect().then(result => {
+    	return res.status(200).send(result)
+    });    
+}
+
+
+
+// 4. Authenticated Route for deleting a user
+export const deleteUser = function (req, res) {
+	const dbConnect = async () => {
+		let db=null;
+		let user=null
+		try{
+			await mongoose.connect(conn.DBHost, {});
+			db=mongoose.connection
+			if(!db){
+				console.log("Error connecting DB");
+			}else{
+				console.log("DB Connection Successful")
+				
+			    const result=await User.findByIdAndDelete(req.body.id)
+			    return result
+			}
+
+			db.close()
+		}catch (err) {
+        	(db) && db.close(); /** Needs to close connection -
+            Only if mongoose.connect() is success & fails after it, as db connection is established by then. */
+            console.log('Error at dbConnect ::', err)
+            throw err;
+    	}	
+    }
+
+    dbConnect().then(result => {
+    	if(!result){
+			return res.status(401).send({message: "Record does not exist."});
+    	}else{
+    		return res.status(200).send({message: "Record has been deleted."})
+    	}
+    	
+    });    
+}
+
+
+/**
+* Demonstrate an admin action, which the user would need to authenticate for
+* For example, viewing all the users in the database
+* @param req - the form data sent with the request
+* @param res - the result to send back to the user
+*/
+export const admin = function(req,res){
+//we could do something here, like get all the users from the database and
+//add them to the JSON being returned
+	res.status(200).json({
+		status: "success",
+		message: "Admin area reached successfully"
+	})
+}
 	
 
